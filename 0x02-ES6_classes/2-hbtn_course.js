@@ -1,3 +1,7 @@
+/**
+ * HolbertonCourse class represents a course with a name, length, and list of students.
+ * It provides setters and getters with type validation for each attribute.
+ */
 export default class HolbertonCourse {
   constructor(name, length, students) {
     this._name = name;
