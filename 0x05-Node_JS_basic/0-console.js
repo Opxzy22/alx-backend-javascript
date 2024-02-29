@@ -1,3 +1,3 @@
 function displayMessage(messsage) {
-	console.log(message);
+  console.log(message);
 }
