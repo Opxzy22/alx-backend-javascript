@@ -6,12 +6,10 @@ const rl = readline.createInterface({
 });
 
 console.log('Welcome to Holberton School, what is your name?');
-rl.on('line', (name) => {
-  console.log(`Your name is: ${name}\r`);
-  rl.close();
-});
 
-rl.on('close', () => {
+rl.on('line', (name) => {
+  console.log(`Your name is: ${name}`);
+  rl.close();
+}).on('close', () => {
   console.log('This important software is now closing');
-  process.exit(0);
 });
