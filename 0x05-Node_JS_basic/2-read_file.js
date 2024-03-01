@@ -12,7 +12,7 @@ function countStudents(path) {
     const lines = data.split('\n').filter((line) => line.trim());
     lines.forEach((student) => {
       const fields = student.split(',');
-      if (fields.length > 0) {
+      if (fields.length === 4) {
         const [firstname, , , field] = fields;
         if (field === 'CS') {
           csCount += 1;
@@ -27,7 +27,8 @@ function countStudents(path) {
     console.log(`Number of students in CS: ${csCount}. List: ${csName.join(', ')}`);
     console.log(`Number of students in SWE: ${sweCount}. List: ${sweName.join(', ')}`);
   } catch (err) {
-    throw new Error('Cannot load database');
+    console.error('Cannot load database');
+    process.exit(1);
   }
 }
 
