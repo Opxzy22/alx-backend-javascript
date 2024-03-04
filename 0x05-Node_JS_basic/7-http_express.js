@@ -9,7 +9,7 @@ let sweCount = 0;
 let sweName = [];
 
 app.get('/', (req, res) => {
-  res.send('Hello Holberton School!');
+  res.send(200, 'Hello Holberton School!');
 });
 
 app.get('/students', (req, res) => {
@@ -18,28 +18,24 @@ app.get('/students', (req, res) => {
     if (err) {
       res.end(`${response} Cannot load database`);
     } else {
-      try {
-        const lines = data.split('\n').filter(line => line.trim());
-        lines.forEach((student) => {
-          const fields = student.split(',');
-          if (fields.length === 4) {
-            const [firstname, , , field] = fields;
-            if (field === 'CS') {
-              csCount += 1;
-              csName.push(firstname);
-            } else if (field === 'SWE') {
-              sweCount += 1;
-              sweName.push(firstname);
-            }
+      const lines = data.split('\n').filter(line => line.trim());
+      lines.forEach((student) => {
+        const fields = student.split(',');
+        if (fields.length === 4) {
+          const [firstname, , , field] = fields;
+          if (field === 'CS') {
+            csCount += 1;
+            csName.push(firstname);
+          } else if (field === 'SWE') {
+            sweCount += 1;
+            sweName.push(firstname);
           }
-        });
-        const studNumber = `Number of students: ${lines.length}`;
-        const csList = `Number of students in CS: ${csCount} List: ${csName}`;
-        const sweList = `Number of students in SWE: ${sweCount} List: ${sweName}`;
-        res.end(`${response}\n${studNumber}\n${csList}\n${sweList}`);
-      } catch (err) {
-        console.log(err);
-      }
+        }
+      });
+      const studNumber = `Number of students: ${lines.length}`;
+      const csList = `Number of students in CS: ${csCount} List: ${csName}`;
+      const sweList = `Number of students in SWE: ${sweCount} List: ${sweName}`;
+      res.end(`${response}\n${studNumber}\n${csList}\n${sweList}`);
     }
   });
 });
