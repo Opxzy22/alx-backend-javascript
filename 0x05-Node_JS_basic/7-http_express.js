@@ -3,37 +3,44 @@ const express = require('express');
 const fs = require('fs');
 
 const app = express();
+const arg = process.argv[2];
+let csCount = 0;
+let csName = [];
+let sweCount = 0;
+let sweName = [];
 
 app.get('/', (req, res) => {
   res.send('Hello Holberton School!');
 });
 
 app.get('/students', (req, res) => {
-  let response = 'This is the list of our students\n';
-  fs.readFile(process.argv[2], { encoding: 'utf8' }, (err, data) => {
+  const response = 'This is the list of our students';
+  fs.readFile(arg, 'utf-8', (err, data) => {
     if (err) {
-      res.end(`${response}Cannot load the database`);
+      res.end(`${response} Cannot load database`);
     } else {
-      const lines = data.split('\n');
-      let noOfStudents = 0;
-      const fields = {};
-      for (const line of lines) {
-        const details = line.split(',');
-        // eslint-disable-next-line no-continue
-        if (line === '' || details[3] === 'field') continue;
-        const [firstname, field] = [details[0], details[3]];
-        if (!fields[field]) fields[field] = [firstname];
-        else fields[field].push(firstname);
-        noOfStudents += 1;
+      try {
+        const lines = data.split('\n').filter(line => line.trim());
+        lines.forEach((student) => {
+          const fields = student.split(',');
+          if (fields.length === 4) {
+            const [firstname, , , field] = fields;
+            if (field === 'CS') {
+              csCount += 1;
+              csName.push(firstname);
+            } else if (field === 'SWE') {
+              sweCount += 1;
+              sweName.push(firstname);
+            }
+          }
+        });
+        const studNumber = `Number of students: ${lines.length - 1}`;
+        const csList = `Number of students in CS: ${csCount} List: ${csName}`;
+        const sweList = `Number of students in SWE: ${sweCount} List: ${sweName}`;
+        res.end(`${response}\n${studNumber}\n${csList}\n${sweList}`);
+      } catch (err) {
+        console.log(err);
       }
-      response += `Number of students: ${noOfStudents}\n`;
-      for (const field of Object.keys(fields)) {
-        const noOfStudents = fields[field].length;
-        const listOfStudents = fields[field].join(', ');
-        response += `Number of students in ${field}: ${noOfStudents}. List: ${listOfStudents}\n`;
-      }
-      response = response.slice(0, -1);
-      res.end(response);
     }
   });
 });
