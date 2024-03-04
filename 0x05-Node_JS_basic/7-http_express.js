@@ -34,7 +34,7 @@ app.get('/students', (req, res) => {
             }
           }
         });
-        const studNumber = `Number of students: ${lines.length - 1}`;
+        const studNumber = `Number of students: ${lines.length}`;
         const csList = `Number of students in CS: ${csCount} List: ${csName}`;
         const sweList = `Number of students in SWE: ${sweCount} List: ${sweName}`;
         res.end(`${response}\n${studNumber}\n${csList}\n${sweList}`);
